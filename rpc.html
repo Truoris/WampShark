@@ -1,0 +1,31 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>RPC</title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/autobahn.js"></script>
+</head>
+<body>
+<script>
+    var connectionSub = new autobahn.Connection({
+        url: 'ws://127.0.0.1:8080/ws',
+        realm: 'realm1'
+    });
+
+    connectionSub.onopen = function (session) {
+        function pong(val) {
+            return val;
+        }
+
+        session.register('net.pong', pong);
+    };
+
+    connectionSub.onclose = function(reason, details) {
+
+    };
+
+    connectionSub.open();
+</script>
+
+</body>
+</html>

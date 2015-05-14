@@ -1,0 +1,274 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>WampShark - Crossbar Dashboard</title>
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">WampShark - Crossbar Dashboard</a>
+            </div>
+        
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="connection-state" id="connection-state"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="modal modal-fixed" id="login-page">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Authentication</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" id="login-error"></div>
+                    
+                    URL <input type="text" id="serv" class="input-url" value="ws://127.0.0.1:8080/ws"><br>
+                    Realm <input type="text" id="realm" class="input-realm" value="realm1"><br>
+                    Authentication  <select id="auth" class="input-auth">
+                            <option value="no" selected>Anonymous</option>
+                            <option value="wampcra">WAMP-CRA</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="login();" id="login-btn">Connection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+
+    <div class="dashboard" id="dashboard">
+        
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#sessions" aria-controls="sessions" role="tab" data-toggle="tab">Sessions (<span id="sessions_count">0</span>)</a>
+            </li>
+            <li role="presentation">
+                <a href="#rpc" aria-controls="rpc" role="tab" data-toggle="tab">RPC</a>
+            </li>
+            <li role="presentation">
+                <a href="#pubsub" aria-controls="pubsub" role="tab" data-toggle="tab">Publish/Subscribe</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active width-full" id="sessions">
+                <table class="table table-condensed table-head">
+                    <thead>
+                        <tr>
+                            <th class="session-col-id">Session ID</th>
+                            <th class="session-col-role">Role</th>
+                            <th>Auth Method</th>
+                            <th class="session-col-ip">IP Address</th>
+                            <th class="session-col-protocol">Protocol</th>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-condensed">
+                    <tbody id="sessions_list"></tbody>
+                </table>
+            </div>
+            
+            <div role="tabpanel" class="tab-pane width-full" id="rpc">
+                <table class="table table-condensed table-head">
+                    <thead>
+                        <tr>
+                            <th>URI</th>
+                            <th class="rpc-col-created">Created at</th>
+                            <th class="rpc-col-callees">Callees</th>
+                            <th class="rpc-col-action">Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-condensed">
+                    <tbody id="rpc-list"></tbody>
+                </table>
+            </div>
+            
+            <div role="tabpanel" class="tab-pane width-full" id="pubsub">
+                <div>
+                    <div class="add-topic">
+                        <a data-toggle="modal" data-target="#addTopic">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div class="clear-listener" id="clear-listener">
+                        <span class="glyphicon glyphicon-scissors" aria-hidden="true" onclick="clearListener();"></span>
+                    </div>
+                    <br>
+                    <table class="table table-condensed table-head">
+                        <thead>
+                            <tr>
+                                <th class="topic-col-sub">
+                                	Subscribe 
+                                	<div class="suball">
+				                        <span class="glyphicon glyphicon-unchecked" aria-hidden="true" id="suball" onclick="suballTopic();"></span>
+				                    </div>	
+			                    </th>
+                                <th>URI</th>
+                                <th class="topic-col-created">Created at</th>
+                                <th class="topic-col-subscribers">Subscribers</th>
+                                <th class="topic-col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    
+                    <div class="box-topic-list" id="box-topic-list">
+                        <table class="table table-condensed">
+                            <tbody id="topic-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="table-topic-flow">
+                    <table class="table table-condensed table-head">
+                        <thead>
+                            <tr>
+                                <th>Topic</th>
+                                <th class="flow-col-date">Date</th>
+                                <th class="flow-col-publisher">Publisher</th>
+                                <th class="flow-col-data">Data</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    
+                    <div class="box-topic-flow" id="box-topic-flow">
+                        <table class="table table-condensed">
+                            <tbody id="listener"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="well data-details">
+                    <div class="topic-info" id="topic-info">
+                        
+                    </div>
+                    <div class="json-data-col">
+                        <pre id="json-data" class="json-data">
+                            
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addTopic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Create a topic</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Topic Name</div>
+                            <input type="text" class="form-control" id="sub-topic">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addTopicBySubscribe();">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="pubTopic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Publish on <span id="topic-name"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 1</div>
+                            <input type="text" class="form-control" id="pub-arg1">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 2</div>
+                            <input type="text" class="form-control" id="pub-arg2">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 3</div>
+                            <input type="text" class="form-control" id="pub-arg3">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 4</div>
+                            <input type="text" class="form-control" id="pub-arg4">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 5</div>
+                            <input type="text" class="form-control" id="pub-arg5">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="pubTopicExec();">Publish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup" id="rpc-popup">
+        <div class="panel-title">Call <span id="rpc-name"></span></div>
+        <div>
+            Params :<br>
+            <input type="text" id="rpc-arg1"><br>
+            <input type="text" id="rpc-arg2"><br>
+            <input type="text" id="rpc-arg3"><br>
+            <input type="text" id="rpc-arg4"><br>
+            <input type="text" id="rpc-arg5"><br>
+            <br><br>
+            <button onclick="rpcCall();">Call</button>
+            <button onclick="rpcClose();">Fermer</button>
+        </div>
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+        //AUTOBAHN_DEBUG = true;
+        var wsPub;
+        var wsSub;
+
+        $( document ).ready(function() {
+            dashboard();
+        });
+
+        $( window ).resize(function() {
+            dashboard();
+        });
+
+    </script>
+
+    <script src="js/fonctions.js"></script>
+    <script src="js/autobahn.js"></script>
+    <script src="js/sessions.js"></script>
+    <script src="js/connect.js"></script>
+    <script src="js/md5.js"></script>
+    <script src="js/class/subscribe.class.js"></script>
+    <script src="js/pubsub.js"></script>
+    <script src="js/rpc.js"></script>
+    <script src="js/design.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

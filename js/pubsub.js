@@ -153,7 +153,9 @@ function onUnsubscribe(args) {
 
 function newTopic(details) {
     var html = '<tr id="'+details.id+'"><td class="topic-col-sub"><input type="checkbox" id="check-sub-'+details.id+'" onchange="changeTopicSub(\''+details.uri+'\', \''+details.id+'\')"></td><td>'+details.uri+'</td>';
-    html += '<td class="topic-col-created">'+details.created+'</td><td class="topic-col-subscribers"><span id="subscribers-list-'+details.id+'">'+details.subscribers.length+'</span></td>';
+    html += '<td class="topic-col-created">'+details.created+'</td>';
+    html += '<td class="topic-col-subscribers"><span id="subscribers-list-'+details.id+'" class="subscribers-details" onclick="getSubscribersDetails(\''+details.uri+'\', \''+details.id+'\');">' + 
+    			details.subscribers.length+'</span></td>';
     html += '<td class="topic-col-actions"><button class="btn btn-info btn-compact" onclick="topicPublish(\''+details.uri+'\');">Publish</button></td>';
     html += '</tr>';
 
@@ -248,4 +250,36 @@ function suballTopic() {
         	stopListener(topic);
         }
     }
+}
+
+function getSubscribersDetails(topic, topicID) {
+	$('#sub-details-list').html('');
+	$('#sub-details-topic').html(topic);
+	wsPub.call("wamp.subscription.list_subscribers", [parseInt(topicID)]).then(
+        function (sessions) {
+            for (var i in sessions) {
+                if (sessions[i] != wsSub.id && sessions[i] != wsPub.id) {
+                    wsPub.call("wamp.session.get", [sessions[i]]).then(
+                    	function (details) {
+                    		var ip = details.transport.peer.split(':')[1];
+                    		
+                    		var html = '<tr><td class="session-col-id">'+details.session+'</td>';
+						    html += '<td class="session-col-role">'+details.authrole+'</td><td>'+details.authmethod+'</td>';
+						    html += '<td class="session-col-ip">'+ip+'</td><td class="session-col-protocol">'+details.transport.type;
+						    html += '</td></tr>';
+						    
+						    $('#sub-details-list').append(html);
+                    	},
+                    	function (err) {
+                    		
+                    	}
+                	);
+                } 
+            }
+           	
+           	$('#subscribersDetails').modal('show');
+        }, function (err) {
+			console.log(err);
+        }
+    );
 }

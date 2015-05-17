@@ -154,7 +154,7 @@ function onUnsubscribe(args) {
 function newTopic(details) {
     var html = '<tr id="'+details.id+'"><td class="topic-col-sub"><input type="checkbox" id="check-sub-'+details.id+'" onchange="changeTopicSub(\''+details.uri+'\', \''+details.id+'\')"></td><td>'+details.uri+'</td>';
     html += '<td class="topic-col-created">'+details.created+'</td>';
-    html += '<td class="topic-col-subscribers"><span id="subscribers-list-'+details.id+'" class="subscribers-details" onclick="getSubscribersDetails(\''+details.uri+'\', \''+details.id+'\');">' + 
+    html += '<td class="topic-col-subscribers"><span id="subscribers-list-'+details.id+'" class="sessions-details" onclick="getSessionsDetails(\''+details.uri+'\', \''+details.id+'\', \'sub\');">' + 
     			details.subscribers.length+'</span></td>';
     html += '<td class="topic-col-actions"><button class="btn btn-info btn-compact" onclick="topicPublish(\''+details.uri+'\');">Publish</button></td>';
     html += '</tr>';
@@ -252,10 +252,19 @@ function suballTopic() {
     }
 }
 
-function getSubscribersDetails(topic, topicID) {
-	$('#sub-details-list').html('');
-	$('#sub-details-topic').html(topic);
-	wsPub.call("wamp.subscription.list_subscribers", [parseInt(topicID)]).then(
+function getSessionsDetails(uri, id, domain) {
+	$('#sessions-details-list').html('');
+	var target = '';
+	
+	if (domain == "sub") {
+		$('#sessions-details-title').html('Subscribers list for '+uri);
+		target = 'wamp.subscription.list_subscribers';
+	} else if (domain == "rpc") {
+		$('#sessions-details-title').html('Callees list for '+uri);
+		target = 'wamp.registration.list_callees';
+	} 
+	
+	wsPub.call(target, [parseInt(id)]).then(
         function (sessions) {
             for (var i in sessions) {
                 if (sessions[i] != wsSub.id && sessions[i] != wsPub.id) {
@@ -268,7 +277,7 @@ function getSubscribersDetails(topic, topicID) {
 						    html += '<td class="session-col-ip">'+ip+'</td><td class="session-col-protocol">'+details.transport.type;
 						    html += '</td></tr>';
 						    
-						    $('#sub-details-list').append(html);
+						    $('#sessions-details-list').append(html);
                     	},
                     	function (err) {
                     		
@@ -277,7 +286,7 @@ function getSubscribersDetails(topic, topicID) {
                 } 
             }
            	
-           	$('#subscribersDetails').modal('show');
+           	$('#sessionsDetails').modal('show');
         }, function (err) {
 			console.log(err);
         }

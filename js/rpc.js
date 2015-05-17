@@ -25,6 +25,7 @@ function rpcCall() {
         },
         function (error) {
 			$('#callRPC').modal('hide');
+			displayError(error);
         }
     );
 }
@@ -44,9 +45,8 @@ function onRegister(args) {
             details.callees = sessions;
 
             newRpc(details);
-        }, function (err) {
-
-        }
+        },
+        displayError
     );
 }
 
@@ -83,18 +83,15 @@ function getAllRpc() {
                                 res.callees = sessions;
 
                                 newRpc(res);
-                            }, function (err) {
-
-                            }
+                            },
+                            displayError
                         );
-                    }, function (err) {
-
-                    }
+                    },
+                    displayError
                 );
             }
-        }, function (err) {
-
-        }
+        },
+        displayError
     );
 
     wsPub.subscribe('wamp.registration.on_create', onRegister);

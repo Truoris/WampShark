@@ -119,9 +119,8 @@ function onCreate(args) {
             details.subscribers = sessions;
 
             newTopic(details);
-        }, function (err) {
-
-        }
+        },
+        displayError
     );
 }
 
@@ -181,18 +180,15 @@ function getAllSubscription() {
                                 res.subscribers = sessions;
 
                                 newTopic(res);
-                            }, function (err) {
-
-                            }
+                            },
+                            displayError
                         );
-                    }, function (err) {
-
-                    }
+                    },
+                    displayError
                 );
             }
-        }, function (err) {
-
-        }
+        },
+        displayError
     );
 }
 
@@ -233,14 +229,12 @@ function suballTopic() {
                                 subscribeTopic(res.uri);
                                 $('#check-sub-'+res.id).prop('checked', true);
                             }
-                        }, function (err) {
-    
-                        }
+                        },
+                        displayError
                     );
                 }
-            }, function (err) {
-    
-            }
+            },
+            displayError
         );   
     } else if (_toggleAll == "unsub") {
     	_toggleAll  = "sub";
@@ -264,7 +258,8 @@ function getSessionsDetails(uri, id, domain) {
 		target = 'wamp.registration.list_callees';
 	} 
 	
-	wsPub.call(target, [parseInt(id)]).then(
+	//wsPub.call(target, [parseInt(id)]).then(
+	wsPub.call(target, [id]).then(
         function (sessions) {
             for (var i in sessions) {
                 if (sessions[i] != wsSub.id && sessions[i] != wsPub.id) {
@@ -279,16 +274,13 @@ function getSessionsDetails(uri, id, domain) {
 						    
 						    $('#sessions-details-list').append(html);
                     	},
-                    	function (err) {
-                    		
-                    	}
+                    	displayError
                 	);
                 } 
             }
            	
            	$('#sessionsDetails').modal('show');
-        }, function (err) {
-			console.log(err);
-        }
+        },
+        displayError
     );
 }

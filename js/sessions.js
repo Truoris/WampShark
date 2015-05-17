@@ -43,16 +43,12 @@ function displaySessions() {
                         function (res) {
                             newSession(res);
                         },
-                        function (err) {
-                            $('#sessions_list').html("Can't display sessions list : "+err);
-                        }
+                        displayError
                     );
                 }
             }
         },
-        function (err) {
-            $('#sessions_list').html("Can't display sessions list : "+err);
-        }
+        displayError
     );
 
     wsPub.subscribe('wamp.session.on_join', sessionOnJoin);

@@ -46,3 +46,18 @@ function jsonHighlight(json) {
         return '<span class="json-' + cls + '">' + match + '</span>';
     });
 }
+
+function displayError(err) {
+	if (typeof err.kwargs.message != "undefined") {
+		$.notify(err.kwargs.message, {
+			 autoHide: false,
+			 className: 'error'
+		});
+	} else {
+		$.notify(err, {
+			 autoHide: false,
+			 className: 'error'
+		});
+	}
+	
+}

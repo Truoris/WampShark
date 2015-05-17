@@ -227,18 +227,47 @@
         </div>
     </div>
 
-    <div class="popup" id="rpc-popup">
-        <div class="panel-title">Call <span id="rpc-name"></span></div>
-        <div>
-            Params :<br>
-            <input type="text" id="rpc-arg1"><br>
-            <input type="text" id="rpc-arg2"><br>
-            <input type="text" id="rpc-arg3"><br>
-            <input type="text" id="rpc-arg4"><br>
-            <input type="text" id="rpc-arg5"><br>
-            <br><br>
-            <button onclick="rpcCall();">Call</button>
-            <button onclick="rpcClose();">Fermer</button>
+
+	<div class="modal fade" id="callRPC" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Call <span id="topic-name"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 1</div>
+                            <input type="text" class="form-control" id="rpc-arg1">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 2</div>
+                            <input type="text" class="form-control" id="rpc-arg2">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 3</div>
+                            <input type="text" class="form-control" id="rpc-arg3">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 4</div>
+                            <input type="text" class="form-control" id="rpc-arg4">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="input-group-addon">Arg 5</div>
+                            <input type="text" class="form-control" id="rpc-arg5">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="rpcCall();">Call</button>
+                </div>
+            </div>
         </div>
     </div>
 

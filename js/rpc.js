@@ -4,7 +4,7 @@ function rpcCallPopup(uri) {
     _callURI = uri;
 
     $('#rpc-name').html(uri);
-    $('#rpc-popup').show();
+    $('#callRPC').modal('show');
 }
 
 function rpcCall() {
@@ -20,18 +20,14 @@ function rpcCall() {
 
     wsPub.call(_callURI, args).then(
         function (result) {
-            alert('Result : '+result);
+            $('#callRPC').modal('hide');
+            alert('Call result : '+result);
         },
         function (error) {
-
+			$('#callRPC').modal('hide');
         }
     );
 }
-
-function rpcClose() {
-    $('#rpc-popup').hide();
-}
-
 
 
 function onRegister(args) {

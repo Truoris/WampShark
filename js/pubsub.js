@@ -258,8 +258,7 @@ function getSessionsDetails(uri, id, domain) {
 		target = 'wamp.registration.list_callees';
 	} 
 	
-	//wsPub.call(target, [parseInt(id)]).then(
-	wsPub.call(target, [id]).then(
+	wsPub.call(target, [parseInt(id)]).then(
         function (sessions) {
             for (var i in sessions) {
                 if (sessions[i] != wsSub.id && sessions[i] != wsPub.id) {

@@ -48,8 +48,14 @@ function jsonHighlight(json) {
 }
 
 function displayError(err) {
+	console.log(err);
 	if (typeof err.kwargs.message != "undefined") {
 		$.notify(err.kwargs.message, {
+			 autoHide: false,
+			 className: 'error'
+		});
+	} else if (typeof err.args[0] != "undefined") {
+		$.notify(err.args[0], {
 			 autoHide: false,
 			 className: 'error'
 		});

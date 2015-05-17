@@ -29,8 +29,6 @@ function Subscribe(topic) {
         function (sub) {
             ptr = sub;
         },
-        function (err) {
-
-        }
+    	displayError
     );
 }

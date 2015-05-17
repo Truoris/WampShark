@@ -32,10 +32,14 @@
                     
                     URL <input type="text" id="serv" class="input-url" value="ws://127.0.0.1:8080/ws"><br>
                     Realm <input type="text" id="realm" class="input-realm" value="realm1"><br>
-                    Authentication  <select id="auth" class="input-auth">
+                    Authentication  <select id="auth" class="input-auth" onchange="changeAuthType();">
                             <option value="no" selected>Anonymous</option>
                             <option value="wampcra">WAMP-CRA</option>
                     </select>
+                    <div class="form-auth" id="auth-wampcra">
+                    	Login <input type="text" id="user" class="input-login"><br>
+                    	Password <input type="password" id="password" class="input-password"><br>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" onclick="login();" id="login-btn">Connection</button>
@@ -178,7 +182,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addTopicBySubscribe();">Create</button>
+                    <button type="button" class="btn btn-primary" onclick="addTopic();">Create</button>
                 </div>
             </div>
         </div>

@@ -59,7 +59,8 @@ function onUnregister(args) {
 function newRpc(details) {
     var html = '<tr id="rpc-'+details.id+'"><td>'+details.uri+'</td>';
     html += '<td class="rpc-col-created">'+details.created +'</td>';
-    html += '<td class="rpc-col-callees"><span id="callees-list-'+details.id+'" class="sessions-details" onclick="getSessionsDetails(\''+details.uri+'\', \''+details.id+'\', \'rpc\');">'+JSON.stringify(details.callees)+'</span></td>';
+    html += '<td class="rpc-col-callees"><span id="callees-list-'+details.id+'" class="sessions-details" onclick="getSessionsDetails(\''+details.uri+'\', \''+details.id+'\', \'rpc\');">'
+    				+JSON.stringify(details.callees)+'</span></td>';
     html += '<td class="rpc-col-action"><button class="btn btn-info btn-compact" onclick="rpcCallPopup(\''+details.uri+'\');">Call</button></td>';
     html += '</tr>';
 
@@ -94,6 +95,12 @@ function getAllRpc() {
         displayError
     );
 
-    wsPub.subscribe('wamp.registration.on_create', onRegister);
-    wsPub.subscribe('wamp.registration.on_delete', onUnregister);
+    wsPub.subscribe('wamp.registration.on_create', onRegister).then(
+    	function (res) {},
+    	displayError
+    );
+    wsPub.subscribe('wamp.registration.on_delete', onUnregister).then(
+    	function (res) {},
+    	displayError
+    );
 }

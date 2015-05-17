@@ -51,7 +51,13 @@ function displaySessions() {
         displayError
     );
 
-    wsPub.subscribe('wamp.session.on_join', sessionOnJoin);
-    wsPub.subscribe('wamp.session.on_leave', sessionOnLeave);
+    wsPub.subscribe('wamp.session.on_join', sessionOnJoin).then(
+    	function (res) {},
+    	displayError
+    );
+    wsPub.subscribe('wamp.session.on_leave', sessionOnLeave).then(
+    	function (res) {},
+    	displayError
+    );
 }
 

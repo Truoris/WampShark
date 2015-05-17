@@ -6,6 +6,18 @@ function login() {
     if (auth == 'no') {
         $('#login-btn').html('...');
         wsConnectAnonymous(url, realm);
+    } else if (auth == 'wampcra') {
+        $('#login-btn').html('...');
+        
+        var id = {
+        	user: $('#user').val(),
+        	password: $('#password').val()
+        }
+        
+        $('#user').val('');
+        $('#password').val('');
+        
+        wsConnectWampcra(url, realm, id);
     }
 }
 
@@ -31,6 +43,16 @@ function loginError(msg) {
     $('#login-margin').show();
     $('#login-page').show();
 
-    $('#login-error').html('Connection close : '+msg);
+    $('#login-error').html('Error : '+msg);
     $('#login-error').show();
+}
+
+function changeAuthType() {
+	var auth = $('#auth').val();
+	
+	if (auth == "wampcra") {
+		$('#auth-wampcra').show();
+	} else {
+		$('#auth-wampcra').hide();
+	}
 }

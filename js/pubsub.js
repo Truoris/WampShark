@@ -3,35 +3,6 @@ var _dataList = [];
 var _dataIndex = 0;
 var _toggleAll = "sub";
 
-function addTopic() {
-    $('#addTopic').show();
-}
-
-function addTopicClose() {
-    $('#addTopic').hide();
-}
-
-function addTopicBy(type) {
-    $('.add-topic-type').hide();
-    $('#'+type).show();
-
-    $('.add-topic-menu-item').removeClass('active');
-    $('#menu-'+type).addClass('active');
-}
-
-function addTopicByPublish() {
-    var topic = $('#createby-pub-topic').val();
-    var msg = $('#createby-pub-msg').val();
-
-    if (topic != "") {
-        wsPub.publish(topic, [msg]);
-        $('#addTopic').hide();
-
-        $('#createby-pub-topic').val('');
-        $('#createby-pub-msg').val('');
-    }
-}
-
 function checkTopic(topic, sub) {
     $('#check-sub-'+sub.getTopicID()).prop('checked', true);
     
@@ -42,7 +13,7 @@ function addPtrToList(topic, sub) {
     subList[topic] = sub.getPtr();
 }
 
-function addTopicBySubscribe() {
+function addTopic() {
     var topic = $('#sub-topic').val();
 
     var sub = new Subscribe(topic);
@@ -91,7 +62,11 @@ function pubTopicExec() {
         }
     }
 
-    wsPub.publish(_topic, args);
+    wsPub.publish(_topic, args, {}, {acknowledge: true}).then(
+	   function (res) {},
+	   displayError
+	);
+	
     $('#pubTopic').modal('hide');
 }
 
@@ -193,10 +168,22 @@ function getAllSubscription() {
 }
 
 function runSubListener() {
-    wsPub.subscribe('wamp.subscription.on_create', onCreate);
-    wsPub.subscribe('wamp.subscription.on_delete', onDelete);
-    wsPub.subscribe('wamp.subscription.on_subscribe', onSubscribe);
-    wsPub.subscribe('wamp.subscription.on_unsubscribe', onUnsubscribe);
+    wsPub.subscribe('wamp.subscription.on_create', onCreate).then(
+    	function (res) {},
+    	displayError
+    );
+    wsPub.subscribe('wamp.subscription.on_delete', onDelete).then(
+    	function (res) {},
+    	displayError
+    );
+    wsPub.subscribe('wamp.subscription.on_subscribe', onSubscribe).then(
+    	function (res) {},
+    	displayError
+    );
+    wsPub.subscribe('wamp.subscription.on_unsubscribe', onUnsubscribe).then(
+    	function (res) {},
+    	displayError
+    );
 }
 
 function displayData (index, topic, date, publisher) {

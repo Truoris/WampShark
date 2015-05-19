@@ -15,3 +15,7 @@ WampShark need at least crosbar V0.10.
 * Topics list
 * Publish on a topic
 * Listen on multiple topics
+
+## License
+
+WampShark is published under the [MIT license](http://opensource.org/licenses/MIT)

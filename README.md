@@ -6,6 +6,8 @@ WampShark is a debug tool for crossbar.io and application using WAMP.WS protocol
 
 WampShark need at least crosbar V0.10.
 
+If you use authorization, you must have all access on "wamp.*".
+
 ## Versions
 
 ### V1.0
@@ -15,6 +17,7 @@ WampShark need at least crosbar V0.10.
 * Topics list
 * Publish on a topic
 * Listen on multiple topics
+* Support Wamp-CRA Authentication
 
 ## License
 

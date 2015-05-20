@@ -29,7 +29,7 @@ function loginSuccess(url, realm) {
     
     $('#login-btn').html('Connection');
     
-    $('#connection-state').html('You are connected on<br>'+url+' (Realm : '+realm+')');
+    $('#connection-state').html('You are connected on <a href="" class="logout glyphicon glyphicon-log-out" aria-hidden="true"></a><br>'+url+' (Realm : '+realm+')');
 
     displaySessions();
     getAllSubscription();

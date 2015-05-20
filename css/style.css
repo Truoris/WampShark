@@ -9,6 +9,10 @@
     
 }
 
+.logout {
+	display: inline !important;
+}
+
 .informations {
 	text-align: left;
 }

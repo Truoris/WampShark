@@ -7,17 +7,18 @@ function login() {
         $('#login-btn').html('...');
         wsConnectAnonymous(url, realm);
     } else if (auth == 'wampcra') {
-        $('#login-btn').html('...');
-        
         var id = {
         	user: $('#user').val(),
         	password: $('#password').val()
         }
         
-        $('#user').val('');
-        $('#password').val('');
+        if (id.user != '' && id.password != '') {
+        	$('#login-btn').html('...');
+        	$('#user').val('');
+    		$('#password').val('');
         
-        wsConnectWampcra(url, realm, id);
+        	wsConnectWampcra(url, realm, id);
+        }
     }
 }
 

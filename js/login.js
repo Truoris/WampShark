@@ -37,7 +37,12 @@ function loginSuccess(url, realm) {
     getAllRpc();
 }
 
-function loginError(msg) {
+function loginError(reason, details) {
+	var msg = reason;
+	if (details.message != null) {
+		msg += '<br>'+details.message;
+	}
+	
     $('#login-btn').html('Connection');
     $('#connection-state').html('');
     $('#dashboard').hide();
@@ -46,6 +51,20 @@ function loginError(msg) {
 
     $('#login-error').html('Error : '+msg);
     $('#login-error').show();
+    
+    subList = [];
+	_dataList = [];
+	_dataIndex = 0;
+	_toggleAll = "sub";
+	sessions_count = 0;
+	_callURI = "";
+	
+	$('#sessions_list').html('');
+	$('#rpc-list').html('');
+	$('#topic-list').html('');
+	$('#listener').html('');
+	
+	$("#suball").attr('class', 'glyphicon glyphicon-unchecked');
 }
 
 function changeAuthType() {

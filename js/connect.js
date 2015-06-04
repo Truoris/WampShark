@@ -6,13 +6,7 @@ function wsConnect(connectionPub, connectionSub, url, realm) {
     };
 
     connectionPub.onclose = function(reason, details) {
-    	console.log(details);
-    	if (details.message != null) {
-    		loginError(reason+'<br>'+details.message);
-    	} else {
-    		loginError(reason);
-    	}
-        
+    	loginError(reason, details);
     };
 
     connectionPub.open();
@@ -24,11 +18,7 @@ function wsConnect(connectionPub, connectionSub, url, realm) {
     };
 
     connectionSub.onclose = function(reason, details) {
-        if (details.message != null) {
-    		loginError(reason+'<br>'+details.message);
-    	} else {
-    		loginError(reason);
-    	}
+        loginError(reason, details);
     };
 
     connectionSub.open();

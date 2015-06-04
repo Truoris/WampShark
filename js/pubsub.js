@@ -2,6 +2,7 @@ var subList = [];
 var _dataList = [];
 var _dataIndex = 0;
 var _toggleAll = "sub";
+var _topic;
 
 function checkTopic(topic, sub) {
     $('#check-sub-'+sub.getTopicID()).prop('checked', true);
@@ -16,10 +17,12 @@ function addPtrToList(topic, sub) {
 function addTopic() {
     var topic = $('#sub-topic').val();
 
-    var sub = new Subscribe(topic);
+	if (!(topic in subList)) {
+		var sub = new Subscribe(topic);
 
-    setTimeout(checkTopic, 600, topic, sub);
-    
+    	setTimeout(addPtrToList, 500, topic, sub);
+	}
+	
     $('#addTopic').modal('hide')
     $('#sub-topic').val('');
 }
@@ -33,12 +36,12 @@ function changeTopicSub(topic, id) {
 }
 
 function subscribeTopic(topic) {
-    var sub = new Subscribe(topic);
+    if (!(topic in subList)) {
+		var sub = new Subscribe(topic);
 
-    setTimeout(addPtrToList, 500, topic, sub);
+    	setTimeout(addPtrToList, 500, topic, sub);
+	}
 }
-
-var _topic;
 
 function topicPublish(topic) {
     _topic = topic;

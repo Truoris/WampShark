@@ -3,10 +3,14 @@ function dashboard() {
     var height = $( document ).height();
     
     var heightTopics = height-410;
+    var heightRPC = height-150;
     var heightTopicList = heightTopics*(40/100);
     
     $('#box-topic-flow').height(heightTopics*(60/100));
     $('#box-topic-list').height(heightTopicList);
+    
+    $('#box-rpc-list').height(heightRPC);
+    $('#box-session-list').height(heightRPC);
     
     
     $('#clear-listener').css('top', heightTopicList+115);

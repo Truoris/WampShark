@@ -259,6 +259,14 @@
     overflow-y: scroll;
 }
 
+.box-rpc-list {
+	overflow-y: scroll;
+}
+
+.box-session-list {
+	overflow-y: scroll;
+}
+
 .table-head {
     margin-bottom: 0px;
 }

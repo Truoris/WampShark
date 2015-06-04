@@ -23,6 +23,20 @@ function login() {
 }
 
 function loginSuccess(url, realm) {
+	var history = JSON.parse(localStorage.history);
+	
+	if (history.urls.indexOf(url) <= -1) {
+		history.urls.push(url);
+		
+	}
+	
+	if (history.realms.indexOf(realm) <= -1) {
+		history.realms.push(realm);
+		
+	}
+	
+	localStorage.history = JSON.stringify(history);
+	
     $('#login-page').hide();
     $('#login-margin').hide();
     $('#dashboard').show();
@@ -74,5 +88,24 @@ function changeAuthType() {
 		$('#auth-wampcra').show();
 	} else {
 		$('#auth-wampcra').hide();
+	}
+}
+
+function getServersHistory() {
+	if (!("history" in localStorage)) {
+		localStorage.history = JSON.stringify({
+			"realms": ["realm1"],
+			"urls": ["ws://127.0.0.1:8080/ws"]
+		});
+	}
+	
+	var history = JSON.parse(localStorage.history);
+	
+	for (var each in history.urls) {
+		$('#servers').append('<option>'+history.urls[each]+'</option>');
+	}
+	
+	for (var each in history.realms) {
+		$('#realms').append('<option>'+history.realms[each]+'</option>');
 	}
 }

@@ -41,7 +41,12 @@ function wsConnectAnonymous(url, realm)
 
 function onchallenge (session, method, extra) {
         if (method === "wampcra") {
-            return autobahn.auth_cra.sign(_password, extra.challenge);
+			var secret = _password;
+			if ("keylen" in extra) {
+				secret = autobahn.auth_cra.derive_key(_password, extra.salt, extra.iterations, extra.keylen);
+			}
+			
+            return autobahn.auth_cra.sign(secret, extra.challenge);
         }
     }
     

@@ -10,6 +10,10 @@ If you use authorization, you must have all access on "wamp.*".
 
 ## Versions
 
+### V1.1
+* Add an history of servers' URIs and realms
+* Some bugs fix
+
 ### V1.0
 * Sessions list
 * RPCs list

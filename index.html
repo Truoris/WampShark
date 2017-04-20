@@ -39,10 +39,12 @@
                     Authentication  <select id="auth" class="input-auth" onchange="changeAuthType();">
                             <option value="no" selected>Anonymous</option>
                             <option value="wampcra">WAMP-CRA</option>
+                            <option value="ticket">Ticket</option>
                     </select>
                     <div class="form-auth" id="auth-wampcra">
                     	Login <input type="text" id="user" class="input-login"><br>
-                    	Password <input type="password" id="password" class="input-password"><br>
+                      <span class="pwinput">Password <input type="password" id="password" class="input-password"><br></span>
+                      <span class="tktinput">Ticket <input type="test" id="ticket" class="input-login"><br></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -327,6 +329,7 @@
         $( document ).ready(function() {
             dashboard();
             getServersHistory();
+            changeAuthType();
         });
 
         $( window ).resize(function() {

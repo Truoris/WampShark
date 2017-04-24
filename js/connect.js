@@ -2,20 +2,21 @@ var _password;
 var _ticket;
 
 function wsConnect(connectionPub, connectionSub, url, realm) {
-	connectionPub.onopen = function (session) {
+    connectionPub.onopen = function (session, details) {
         wsPub = session;
     };
 
     connectionPub.onclose = function(reason, details) {
-    	loginError(reason, details);
+        loginError(reason, details);
     };
 
     connectionPub.open();
 
-    connectionSub.onopen = function (session) {
+    connectionSub.onopen = function (session, details) {
+        console && console.log && details && details.authextra && console.log('auth version ' + details.authextra.version);
         wsSub = session;
 
-        loginSuccess(url, realm);
+        loginSuccess(url, realm, details.authid);
     };
 
     connectionSub.onclose = function(reason, details) {
@@ -42,11 +43,11 @@ function wsConnectAnonymous(url, realm)
 
 function onchallenge (session, method, extra) {
     if (method === "wampcra") {
-			var secret = _password;
-			if ("keylen" in extra) {
-				secret = autobahn.auth_cra.derive_key(_password, extra.salt, extra.iterations, extra.keylen);
-			}
-			
+            var secret = _password;
+            if ("keylen" in extra) {
+                secret = autobahn.auth_cra.derive_key(_password, extra.salt, extra.iterations, extra.keylen);
+            }
+            
       return autobahn.auth_cra.sign(secret, extra.challenge);
     } else if (method === "ticket") {
       return _ticket;
@@ -55,8 +56,8 @@ function onchallenge (session, method, extra) {
     
 function wsConnectWampcra(url, realm, id)
 {
-	  _password = id.password;
-	
+      _password = id.password;
+    
     var connectionPub = new autobahn.Connection({
         url: url,
         realm: realm,

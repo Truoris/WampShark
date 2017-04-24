@@ -33,7 +33,7 @@ function login() {
     }
 }
 
-function loginSuccess(url, realm) {
+function loginSuccess(url, realm, authid) {
     var history = JSON.parse(localStorage.history);
 
     if (history.urls.indexOf(url) <= -1) {
@@ -54,7 +54,11 @@ function loginSuccess(url, realm) {
 
     $('#login-btn').html('Connection');
 
-    $('#connection-state').html('You are connected on <a href="" class="logout glyphicon glyphicon-log-out" aria-hidden="true"></a><br>'+url+' (Realm : '+realm+')');
+    msg = 'You are connected on <a href="" class="logout glyphicon glyphicon-log-out" aria-hidden="true"></a><br>'+url+' (Realm : '+realm+')';
+    if (authid) {
+        msg += ' as ' + authid;
+    }
+    $('#connection-state').html(msg);
 
     displaySessions();
     getAllSubscription();

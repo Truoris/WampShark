@@ -8,24 +8,32 @@ function rpcCallPopup(uri) {
 }
 
 function rpcCall() {
-    var args = [];
+    var args = [],
+        kwargs = {};
 
     for(var i=1 ; i<=5 ; i++) {
-        var value = $('#rpc-arg'+i).val();
-
-        if (value != "") {
+        var value = $('#rpc-arg'+i).val(),
+            match = value.match(/: /);
+        if (match) {
+            var k = value.substring(0, match.index).trim(),
+                v = value.substring(match.index + 2).trim();
+            kwargs[k] = v;
+        } else if (value != "") {
             args.push(value);
         }
     }
+    console && console.log && console.log({ "args": args, "kwargs": kwargs });
 
-    wsPub.call(_callURI, args).then(
+    wsPub.call(_callURI, args, kwargs).then(
         function (result) {
             $('#callRPC').modal('hide');
             alert('Call result : '+result);
+            console && console.log && console.log({ "result": result });
         },
         function (error) {
-			$('#callRPC').modal('hide');
-			displayError(error);
+            $('#callRPC').modal('hide');
+            console && console.log && console.log({ "error": error });
+            displayError(error);
         }
     );
 }
@@ -60,7 +68,7 @@ function newRpc(details) {
     var html = '<tr id="rpc-'+details.id+'"><td>'+details.uri+'</td>';
     html += '<td class="rpc-col-created">'+details.created +'</td>';
     html += '<td class="rpc-col-callees"><span id="callees-list-'+details.id+'" class="sessions-details" onclick="getSessionsDetails(\''+details.uri+'\', \''+details.id+'\', \'rpc\');">'
-    				+JSON.stringify(details.callees)+'</span></td>';
+                    +JSON.stringify(details.callees)+'</span></td>';
     html += '<td class="rpc-col-action"><button class="btn btn-info btn-compact" onclick="rpcCallPopup(\''+details.uri+'\');">Call</button></td>';
     html += '</tr>';
 
@@ -96,11 +104,11 @@ function getAllRpc() {
     );
 
     wsPub.subscribe('wamp.registration.on_create', onRegister).then(
-    	function (res) {},
-    	displayError
+        function (res) {},
+        displayError
     );
     wsPub.subscribe('wamp.registration.on_delete', onUnregister).then(
-    	function (res) {},
-    	displayError
+        function (res) {},
+        displayError
     );
 }

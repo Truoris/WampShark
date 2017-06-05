@@ -27,7 +27,10 @@ function rpcCall() {
     wsPub.call(_callURI, args, kwargs).then(
         function (result) {
             $('#callRPC').modal('hide');
-            alert('Call result : '+result);
+            var json = JSON.stringify(result, undefined, 4);
+            $('#RPCResult .json-data').html(jsonHighlight(json))
+            $('#RPCResult').modal('show');
+            // alert('Call result : '+result);
             console && console.log && console.log({ "result": result });
         },
         function (error) {

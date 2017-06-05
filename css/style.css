@@ -337,14 +337,6 @@ th.topic-col-actions {
     width: 90px;
 }
 
-th.flow-col-data {
-    width: 465px;
-}
-
-.flow-col-data {
-    width: 450px;
-}
-
 .flow-col-date {
     width: 90px;
 }
@@ -353,7 +345,13 @@ th.flow-col-data {
     width: 90px;
 }
 
+.flow-col-topic {
+    width: 90px;
+}
 
+.flow-col-data {
+    text-overflow: ellipsis;
+}
 
 .session-col-id {
    width: 150px; 

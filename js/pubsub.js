@@ -78,11 +78,6 @@ function stopListener(topic) {
     delete subList[topic];
 }
 
-
-
-
-
-
 function onCreate(args) {
     var details = args[1];
 
